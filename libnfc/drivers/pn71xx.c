@@ -582,6 +582,7 @@ const struct nfc_driver pn71xx_driver = {
   .get_supported_baud_rate          = pn71xx_get_supported_baud_rate,
   .device_get_information_about     = pn71xx_get_information_about,
 
+  .send_apdu = NULL,
   .abort_command  = pn71xx_abort_command,
   .idle           = pn71xx_idle,
   .powerdown      = pn71xx_PowerDown,

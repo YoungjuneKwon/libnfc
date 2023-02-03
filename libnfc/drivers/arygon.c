@@ -624,6 +624,7 @@ const struct nfc_driver arygon_driver = {
   .get_supported_baud_rate      = pn53x_get_supported_baud_rate,
   .device_get_information_about = pn53x_get_information_about,
 
+  .send_apdu = NULL,
   .abort_command  = arygon_abort_command,
   .idle           = pn53x_idle,
   /* Even if PN532, PowerDown is not recommended on those devices */

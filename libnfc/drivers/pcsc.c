@@ -1074,6 +1074,7 @@ const struct nfc_driver pcsc_driver = {
   .get_supported_baud_rate      = pcsc_get_supported_baud_rate,
   .device_get_information_about = pcsc_get_information_about,
 
+  .send_apdu = NULL,
   .abort_command  = NULL,  // Abort is not supported in this driver
   .idle           = NULL,
   .powerdown      = NULL,

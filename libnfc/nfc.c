@@ -1433,3 +1433,10 @@ str_nfc_target(char **buf, const nfc_target *pnt, bool verbose)
   snprint_nfc_target(*buf, 4096, pnt, verbose);
   return strlen(*buf);
 }
+
+int
+nfc_send_apdu(nfc_device *pnd, const uint8_t ins, const uint8_t p1, const uint8_t p2, const uint8_t *const data,
+         size_t data_len, const uint8_t le, uint8_t *out, const size_t out_size)
+{
+  HAL(send_apdu, pnd,ins,p1,p2,data,data_len,le,out,out_size);
+}

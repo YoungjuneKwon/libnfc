@@ -507,6 +507,7 @@ const struct nfc_driver acr122_pcsc_driver = {
   .get_supported_baud_rate      = pn53x_get_supported_baud_rate,
   .device_get_information_about = pn53x_get_information_about,
 
+  .send_apdu = NULL,
   .abort_command  = NULL,  // Abort is not supported in this driver
   .idle           = pn53x_idle,
   /* Even if PN532, PowerDown is not recommended on those devices */

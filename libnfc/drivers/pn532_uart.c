@@ -563,6 +563,7 @@ const struct nfc_driver pn532_uart_driver = {
   .get_supported_baud_rate      = pn53x_get_supported_baud_rate,
   .device_get_information_about = pn53x_get_information_about,
 
+  .send_apdu = NULL,
   .abort_command  = pn532_uart_abort_command,
   .idle           = pn53x_idle,
   .powerdown      = pn53x_PowerDown,
