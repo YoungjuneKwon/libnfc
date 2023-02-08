@@ -54,6 +54,7 @@
 
 #include <nfc/nfc.h>
 #include <nfc/nfc-types.h>
+#include "chips/pn53x.h"
 
 #include "utils/nfc-utils.h"
 
@@ -100,8 +101,8 @@ main(int argc, const char *argv[])
     }
   }
 
-  const uint8_t uiPollNr = 20;
-  const uint8_t uiPeriod = 2;
+  const uint8_t uiPollNr = 1;
+  const uint8_t uiPeriod = 1;
   const nfc_modulation nmModulations[6] = {
     { .nmt = NMT_ISO14443A, .nbr = NBR_106 },
     { .nmt = NMT_ISO14443B, .nbr = NBR_106 },
@@ -138,6 +139,7 @@ main(int argc, const char *argv[])
 
   printf("NFC reader: %s opened\n", nfc_device_get_name(pnd));
   printf("NFC device will poll during %ld ms (%u pollings of %lu ms for %" PRIdPTR " modulations)\n", (unsigned long) uiPollNr * szModulations * uiPeriod * 150, uiPollNr, (unsigned long) uiPeriod * 150, szModulations);
+  led_set_ready();
   if ((res = nfc_initiator_poll_target(pnd, nmModulations, szModulations, uiPollNr, uiPeriod, &nt))  < 0) {
     nfc_perror(pnd, "nfc_initiator_poll_target");
     nfc_close(pnd);
@@ -147,10 +149,14 @@ main(int argc, const char *argv[])
 
   if (res > 0) {
     print_nfc_target(&nt, verbose);
+    /*
     printf("Waiting for card removing...");
     fflush(stdout);
     while (0 == nfc_initiator_target_is_present(pnd, NULL)) {}
     nfc_perror(pnd, "nfc_initiator_target_is_present");
+    */
+    buzzer_and_led();
+
     printf("done.\n");
   } else {
     printf("No target found.\n");
@@ -160,3 +166,24 @@ main(int argc, const char *argv[])
   nfc_exit(context);
   exit(EXIT_SUCCESS);
 }
+
+void led_set_ready() {
+  uint8_t buffRx[255] = {0};
+  uint8_t cmd[] = {0X01, 0x00, 0x01, 0x01};
+
+  cmd[1] = 0x00;
+  cmd[2] = 0x00;
+
+  nfc_send_apdu(pnd, 0x00, 0x40, 0x40, (uint8_t *)cmd, sizeof(cmd), 0, buffRx, sizeof(buffRx));
+}
+
+void buzzer_and_led() {
+  uint8_t buffRx[255] = {0};
+  uint8_t cmd[] = {0X01, 0x00, 0x01, 0x01};
+
+  cmd[1] = 0x00;
+  cmd[2] = 0x01;
+
+  nfc_send_apdu(pnd, 0x00, 0x40, 0x50, (uint8_t *)cmd, sizeof(cmd), 0, buffRx, sizeof(buffRx));
+}
+
