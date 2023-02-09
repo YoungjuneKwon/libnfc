@@ -169,20 +169,14 @@ main(int argc, const char *argv[])
 
 void led_set_ready() {
   uint8_t buffRx[255] = {0};
-  uint8_t cmd[] = {0X01, 0x00, 0x01, 0x01};
+  uint8_t cmd[] = {0X00, 0x00, 0x01, 0x00};
 
-  cmd[1] = 0x00;
-  cmd[2] = 0x00;
-
-  nfc_send_apdu(pnd, 0x00, 0x40, 0x40, (uint8_t *)cmd, sizeof(cmd), 0, buffRx, sizeof(buffRx));
+  nfc_send_apdu(pnd, 0x00, 0x40, 0x0A, (uint8_t *)cmd, sizeof(cmd), 0, buffRx, sizeof(buffRx));
 }
 
 void buzzer_and_led() {
   uint8_t buffRx[255] = {0};
   uint8_t cmd[] = {0X01, 0x00, 0x01, 0x01};
-
-  cmd[1] = 0x00;
-  cmd[2] = 0x01;
 
   nfc_send_apdu(pnd, 0x00, 0x40, 0x50, (uint8_t *)cmd, sizeof(cmd), 0, buffRx, sizeof(buffRx));
 }
